@@ -15,64 +15,58 @@ class RestaurantService extends GetxService{
 
   RestaurantService() : _client = http.Client();
 
+  //I deliberately removed try-catch from these functions 
+  //so the controller can catch it and tell the user the error
   Future<RestaurantDetail> getRestaurantDetail(String id) async {
     RestaurantDetail restaurantDetail;
-    try{
-      var uri = Uri.parse(Api.baseEP + Api.getDetailEP + id);
-      var response = await _client.get(
-        uri,
-        headers: _headers,
-      );
-      if(response.statusCode == 200){
-        String body = response.body;
-        Map<String, dynamic> map = json.decode(body);
-        restaurantDetail = RestaurantDetail.fromMap(map['restaurant']);
-      }
-    }catch(e, st){
-      print(st);
-      print(e);
+
+    var uri = Uri.parse(Api.baseEP + Api.getDetailEP + id);
+    var response = await _client.get(
+      uri,
+      headers: _headers,
+    );
+    if(response.statusCode == 200){
+      String body = response.body;
+      Map<String, dynamic> map = json.decode(body);
+      restaurantDetail = RestaurantDetail.fromMap(map['restaurant']);
     }
 
     return restaurantDetail;
   }
   
+  //I deliberately removed try-catch from these functions 
+  //so the controller can catch it and tell the user the error
   Future<List<Restaurant>> getRestaurantList() async{
     List<Restaurant> restaurants;
-    try{
-      var uri = Uri.parse(Api.baseEP + Api.getListEP);
-      var response = await _client.get(
-        uri,
-        headers: _headers,
-      );
-      if(response.statusCode == 200){
-        String body = response.body;
-        Map<String, dynamic> map = json.decode(body);
-        restaurants = List<Restaurant>.from(map['restaurants']?.map((x) => Restaurant.fromMap(x)));
-      }
-    }catch(e, st){ 
-      print(st);
-      print(e);
+
+    var uri = Uri.parse(Api.baseEP + Api.getListEP);
+    var response = await _client.get(
+      uri,
+      headers: _headers,
+    );
+    if(response.statusCode == 200){
+      String body = response.body;
+      Map<String, dynamic> map = json.decode(body);
+      restaurants = List<Restaurant>.from(map['restaurants']?.map((x) => Restaurant.fromMap(x)));
     }
 
     return restaurants;
   }
 
+  //I deliberately removed try-catch from these functions 
+  //so the controller can catch it and tell the user the error
   Future<List<Restaurant>> searchRestaurant(String keyword) async {
     List<Restaurant> restaurants;
-    try{
-      var uri = Uri.parse(Api.baseEP + Api.getSearchEP + keyword);
-      var response = await _client.get(
-        uri,
-        headers: _headers,
-      );
-      if(response.statusCode == 200){
-        String body = response.body;
-        Map<String, dynamic> map = json.decode(body);
-        restaurants = List<Restaurant>.from(map['restaurants']?.map((x) => Restaurant.fromMap(x)));
-      }
-    }catch(e, st){ 
-      print(st);
-      print(e);
+
+    var uri = Uri.parse(Api.baseEP + Api.getSearchEP + keyword);
+    var response = await _client.get(
+      uri,
+      headers: _headers,
+    );
+    if(response.statusCode == 200){
+      String body = response.body;
+      Map<String, dynamic> map = json.decode(body);
+      restaurants = List<Restaurant>.from(map['restaurants']?.map((x) => Restaurant.fromMap(x)));
     }
 
     return restaurants;

@@ -84,7 +84,7 @@ class RestaurantListScreen extends StatelessWidget{
             case RestaurantListStatus.empty:
               return _empty();
             case RestaurantListStatus.error:
-              return _error();
+              return _error(controller.getLists);
             case RestaurantListStatus.loaded:
               return _lists(controller.restaurants);
             default:
@@ -101,13 +101,24 @@ class RestaurantListScreen extends StatelessWidget{
   }
 
   Widget _empty(){
-    return Center(
-      child: Text(
-        'Oops the restaurant you\'re looking for seems to not exist :(\nTry a different keyword, maybe?',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 20,
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Icon(
+            Icons.sentiment_very_dissatisfied,
+            size: Get.size.height / 4,
+          ),
+          Text(
+            'Oops the restaurant you\'re looking for seems to not exist :(\n\nTry a different keyword, maybe?',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,14 +165,35 @@ class RestaurantListScreen extends StatelessWidget{
     );
   }
 
-  Widget _error(){
-    return Center(
-      child: Text(
-        'Unknown error occured',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 20,
-        ),
+  Widget _error(Function retryCallback){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Icon(
+            Icons.sentiment_very_dissatisfied_outlined,
+            size: Get.size.height / 3,
+          ),
+          Text(
+            'Unknown error occured',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          TextButton(
+            onPressed: retryCallback, 
+            child: Text(
+              'Retry',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            )
+          ),
+        ],
       ),
     );
   }

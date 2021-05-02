@@ -31,7 +31,7 @@ class RestaurantDetailScreen extends StatelessWidget{
           builder: (controller) {
             switch(controller.restaurantDetailStatus.value){
               case RestaurantDetailStatus.error:
-                return _error();
+                return _error(() => controller.getRestaurant(id));
               case RestaurantDetailStatus.loaded:
                 return _detail(controller.restaurantDetail.value);
               default:
@@ -48,13 +48,37 @@ class RestaurantDetailScreen extends StatelessWidget{
     );
   }
 
-  Widget _error(){
-    return Center(
-      child: Text(
-        'Unknown error occured',
-        style: TextStyle(
-          fontSize: 20,
-        ),
+  Widget _error(Function retryCallback){
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Icon(
+              Icons.sentiment_very_dissatisfied_outlined,
+              size: Get.size.height / 3,
+            ),
+          ),
+          Text(
+            'Unknown error occured',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          TextButton(
+            onPressed: retryCallback, 
+            child: Text(
+              'Retry',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            )
+          ),
+        ],
       ),
     );
   }
