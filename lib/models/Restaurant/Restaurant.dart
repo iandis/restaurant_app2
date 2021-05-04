@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
-import '../Api.dart';
+import '../../Api.dart';
 
 part 'RestaurantDetail.dart';
 part 'RestaurantReview.dart';

@@ -31,7 +31,11 @@ dependencies:
   http: 
   get: 
   meta:
+  sqflite:
+  path:
   cached_network_image:
+  rxdart:
+  flutter_local_notifications: ^5.0.0+3
 
 dev_dependencies:
   flutter_test:

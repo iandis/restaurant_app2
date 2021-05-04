@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import '../models/Restaurant.dart';
+import '../models/Restaurant/Restaurant.dart';
 
 class RestaurantCard extends StatelessWidget{
   final Restaurant restaurant;

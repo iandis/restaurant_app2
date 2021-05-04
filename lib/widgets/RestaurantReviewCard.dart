@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_app2/models/Restaurant.dart';
+import 'package:restaurant_app2/models/Restaurant/Restaurant.dart';
 
 class RestaurantReviewCard extends StatelessWidget{
   final RestaurantReview restaurantReview;
@@ -28,7 +28,7 @@ class RestaurantReviewCard extends StatelessWidget{
           ),
           Text(
             //review
-            restaurantReview.review,
+            restaurantReview.review ?? '',
             style: TextStyle(
               color: Colors.grey[900],
             ),

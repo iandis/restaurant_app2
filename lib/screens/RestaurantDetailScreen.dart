@@ -2,46 +2,76 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:restaurant_app2/widgets/RestaurantCategoryCard.dart';
-import 'package:restaurant_app2/widgets/_widgets.dart';
 
+import '../widgets/_widgets.dart';
 
-import '../models/Restaurant.dart';
+import '../models/Restaurant/Restaurant.dart';
 import '../controllers/_controllers.dart';
 
 class RestaurantDetailScreen extends StatelessWidget{
-  final RestaurantDetailController controller;
-  final String id;
-  
-
-  RestaurantDetailScreen({ @required this.id }) : controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
     
-    return WillPopScope(
-      onWillPop: () async {
-        controller.clearDetail();
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(),
-        body: GetX<RestaurantDetailController>(
-          initState: (state) => controller.getRestaurant(id),
-          builder: (controller) {
-            switch(controller.restaurantDetailStatus.value){
-              case RestaurantDetailStatus.error:
-                return _error(() => controller.getRestaurant(id));
-              case RestaurantDetailStatus.loaded:
-                return _detail(controller.restaurantDetail.value);
-              default:
-                return _loading();  
-            }
+    return GetX<RestaurantDetailController>(
+      builder: (controller) {
+        return WillPopScope(
+          onWillPop: () async {
+            controller.clearDetail();
+            if(controller.fromFavScreen.value) Get.find<FavRestaurantController>().getFavLists();
+            return true;
           },
-        ),
-      ),
+          child: Scaffold(
+            appBar: AppBar(
+              actions: [
+                favIcon(controller),
+              ],
+            ),
+            body: _body(controller), 
+          ),
+        );
+      }
     );
   }
+
+  Widget _body(RestaurantDetailController controller){
+    switch(controller.restaurantDetailStatus.value){
+      case RestaurantDetailStatus.error:
+        return _error(() => controller.getRestaurant(controller.id.value));
+      case RestaurantDetailStatus.loaded:
+        return _detail(controller.restaurantDetail.value);
+      default:
+        return _loading();  
+    }
+  }
+
+  Widget favIcon(RestaurantDetailController controller){
+    switch(controller.isFav.value){
+      case true:
+        ///if is already favorited by user
+        ///return solid heart symbol
+        return Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: IconButton(
+            icon: Icon(Icons.favorite),
+            color: Colors.pinkAccent[400],
+            onPressed: () => controller.setFav(toFav: false),
+          ),
+        );
+      default:
+        //if not
+        //return heart symbol outlined
+        return Padding(
+          padding: const EdgeInsets.only(right: 5),
+          child: IconButton(
+            icon: Icon(Icons.favorite_border),
+            color: Colors.pinkAccent[400],
+            onPressed: controller.setFav,
+          ),
+        );
+    }
+  }
+
   Widget _loading(){
     return Center(
       child: CircularProgressIndicator(),

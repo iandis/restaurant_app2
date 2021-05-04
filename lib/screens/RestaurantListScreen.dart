@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../AppRouter.dart';
-import '../models/Restaurant.dart';
+import '../models/Restaurant/Restaurant.dart';
 import '../widgets/RestaurantCard.dart';
 import '../controllers/RestaurantController.dart';
 
@@ -22,6 +22,11 @@ class RestaurantListScreen extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: Get.size.height / 12,
+        actions: [
+          ///go to fav screen
+          goToFavIcon(),
+          settingsIcon(),
+        ],
         //search bar
         title: TextField(
           focusNode: searchTextFocusNode,
@@ -73,11 +78,15 @@ class RestaurantListScreen extends StatelessWidget{
             ),
           ),
         ),
-        //),
       ),
       body: GetX<RestaurantController>(
         initState: (state) {
           state.controller.getLists();
+          ///goto random restaurant detail when received notification
+          state.controller.notificationService
+            .configureSelectNotificationSubject((payload) {
+              state.controller.gotoRandomRestaurant();
+            });
         },
         builder: (controller) {
           switch(controller.restaurantListStatus.value){
@@ -97,6 +106,42 @@ class RestaurantListScreen extends StatelessWidget{
           state.dispose();
         },
       )
+    );
+  }
+
+  Widget settingsIcon(){
+    return Padding(
+      padding: const EdgeInsets.only(right: 10),
+      child: PopupMenuButton(
+        icon: Icon(
+          Icons.settings
+        ),
+        itemBuilder: (_) {
+          return List.filled(1, 
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  Obx(() => Switch(
+                    value: restaurantController.scheduled.value,
+                    onChanged: (_) async => await restaurantController.scheduleOrCancelRestaurantNotification(),
+                  )),
+                  Text('Daily reminder'),
+                ],
+              ),
+            )
+          );
+        },
+      ),
+    );
+  }
+
+  Widget goToFavIcon(){
+    return IconButton(
+      icon: Icon(
+        Icons.favorite_border
+      ),
+      color: Colors.grey[900],
+      onPressed: () async => await Get.toNamed(AppRoutes.favScreen),
     );
   }
 
@@ -144,16 +189,13 @@ class RestaurantListScreen extends StatelessWidget{
         children: List.generate(
           restaurants.length, 
           (i) => Builder(
-            builder: (_) => 
-              RestaurantCard(
-                restaurant: restaurants[i],
-                onPressed: () async {
-                  await Get.toNamed(
-                    AppRoutes.detailScreen,
-                    arguments: restaurants[i].id,
-                  );
-                },
-              ),
+            builder: (_) {
+              var restaurant = restaurants[i];
+              return RestaurantCard(
+                restaurant: restaurant,
+                onPressed: () => restaurantController.gotoDetail(restaurant.id),
+              );
+            }
           )),
       ),
     );

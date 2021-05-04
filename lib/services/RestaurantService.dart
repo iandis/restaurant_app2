@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:restaurant_app2/models/Restaurant.dart';
+import 'package:restaurant_app2/models/Restaurant/Restaurant.dart';
 
 import '../Api.dart';
 

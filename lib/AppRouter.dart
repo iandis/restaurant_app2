@@ -5,6 +5,8 @@ import 'package:restaurant_app2/screens/_screens.dart';
 class AppRoutes{
   static const String listScreen = '/';
   static const String detailScreen = '/detail';
+  static const String favScreen = '/fav';
+  static const String testScreen = '/test';
 }
 
 class AppRouter{
@@ -13,8 +15,11 @@ class AppRouter{
       builder: (_) {
         switch(settings.name){
           case AppRoutes.detailScreen:
-            var id = settings.arguments as String;
-            return RestaurantDetailScreen(id: id);
+            return RestaurantDetailScreen();
+          case AppRoutes.favScreen:
+            return FavRestaurantScreen();
+          case AppRoutes.testScreen:
+            return TestScreen();
           default:
             return RestaurantListScreen();
         }
